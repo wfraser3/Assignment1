@@ -256,16 +256,14 @@ end
 h = ones(3,3);
 density = imfilter(grid1,h);
 figure(2)
-surf(density);
+imagesc(density)
+colorbar
 title('Electron Position Density (Electrons/nm^2)')
-xlabel('X Position (nm)')
-ylabel('Y Position (nm)')
 
 electronTemperatures = (squaredVel.*m)./kbMax;
 tempGrid = zeros(100,200);
 tempGrid(particles(:,1)) = electronTemperatures;
 figure(3)
-surf(tempGrid)
+imagesc(tempGrid,[0 500])
+colorbar
 title('Temperature Map (K)')
-xlabel('X Position (nm)')
-ylabel('Y Position (nm)')

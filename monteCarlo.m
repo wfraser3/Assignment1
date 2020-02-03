@@ -13,18 +13,6 @@ else
     numTraces = maxTraces;
 end
 
-%{
-setSpeed = input('Would you like the animation to be fast or slow? (Please only type "f" or "s"): ','s');
-
-if(setSpeed=='f')
-    speedFactor = 1e4;
-    timeFactor = 100;
-elseif(setSpeed=='s')
-    speedFactor = 1e5;
-    timeFactor = 10;
-end
-%}
-
 kb = 1.38064852e-23;
 m0 = 9.11e-31;
 m = 0.26*m0;
@@ -74,11 +62,13 @@ end
 grid1(particles(:,1)) = 1;
 gridSize = size(grid1);
 kbMax = kb*1e18*1e-26; %Fixing units
+tempVector = zeros(1,1000);
 
 for time = 1:1000
     squaredVel = (particles(:,4).^2) + (particles(:,5).^2);
     meanVel = mean(squaredVel);
     temperature = (m*meanVel)/kbMax;
+    tempVector(time) = temperature;
     if(time==1)
         figure('units','normalized','outerposition',[0 0 1 1])
         f(1) = subplot(1,2,1);
@@ -158,3 +148,14 @@ for time = 1:1000
     pause(0.0001)
     clear grid2
 end
+
+timeVector = zeros(1,1000);
+for i = 1:length(timeVector)
+    timeVector(i) = i/10;
+end
+
+figure(2)
+plot(timeVector,tempVector,'b')
+title('Material Temperature Over Time')
+xlabel('Time (ps)')
+ylabel('Temperature (K)')

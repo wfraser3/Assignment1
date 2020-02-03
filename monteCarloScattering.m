@@ -111,12 +111,14 @@ clear stopPoint T tempVel tempVel2 v2 vth vth2 velocities histVel maxBolNorm
 
 scatterMatrix = zeros(numparticles,1000);
 averageVel = zeros(1,1000);
+tempVector = zeros(1,1000);
 
 for time = 1:1000
     squaredVel = (particles(:,4).^2) + (particles(:,5).^2);
     meanVel = mean(squaredVel);
     averageVel(time) = sqrt(meanVel);
-    temperature = (m*meanVel)/kbMax;
+    temperature = (m*meanVel)/(kbMax);
+    tempVector(time) = temperature;
     if(plotting)
         if(time==1)
             figure('units','normalized','outerposition',[0 0 1 1])
@@ -240,7 +242,18 @@ for i = 1:numparticles
 end
 
 meanScatterSteps = mean(scatterTimes);
-tauMN = meanScatterSteps;
+tauMN = meanScatterSteps/10;
 
 trueMeanVel = mean(averageVel);
 mfp = tauMN*trueMeanVel;
+
+timeVector = zeros(1,1000);
+for i = 1:1000
+    timeVector(i) = i/10;
+end
+
+figure(3)
+plot(timeVector,tempVector,'b')
+title('Material Temperature VS Time')
+xlabel('Time (ps)')
+ylabel('Temperature (K)')
